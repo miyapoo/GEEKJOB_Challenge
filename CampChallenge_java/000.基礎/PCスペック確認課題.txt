@@ -1,0 +1,11 @@
+課題１
+
+〇PCスペック
+
+・OS：Windows 10 Pro　(10.00,ビルド16299)
+・システムの種類：64-bit operating system
+・実装RAM：4.00GB
+・プロセッサ：Intel(R)Core(TM)i5-3337U CPU @ 1.80GHz(4CPUs),1.8GHz
+
+
+
