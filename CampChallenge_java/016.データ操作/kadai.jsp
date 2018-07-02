@@ -18,7 +18,6 @@
         request.setCharacterEncoding("UTF-8");
         out.print(request.getParameter("txtName"));
         out.print(request.getParameter("radioSample"));
-        out.print(request.getParameter("radioSample2"));
         out.print(request.getParameter("mulText"));
         
         
