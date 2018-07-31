@@ -1,12 +1,12 @@
 package jums;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 /**
  *
@@ -26,10 +26,10 @@ public class SearchResult extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try{
+            HttpSession session=request.getSession();
             request.setCharacterEncoding("UTF-8");//リクエストパラメータの文字コードをUTF-8に変更
-        
-            //フォームからの入力を取得して、JavaBeansに格納
             UserDataBeans udb = new UserDataBeans();
+           //フォームからの入力を取得して、JavaBeansに格納
             udb.setName(request.getParameter("name"));
             udb.setYear(request.getParameter("year"));
             udb.setType(request.getParameter("type"));
@@ -37,11 +37,13 @@ public class SearchResult extends HttpServlet {
             //DTOオブジェクトにマッピング。DB専用のパラメータに変換
             UserDataDTO searchData = new UserDataDTO();
             udb.UD2DTOMapping(searchData);
-
-            UserDataDTO resultData = UserDataDAO .getInstance().search(searchData);
-            request.setAttribute("resultData", resultData);
+//          DAOの検索処理、DTOの値を格納
+            ArrayList<UserDataDTO>resultData = UserDataDAO .getInstance().search(searchData);
             
-            request.getRequestDispatcher("/searchresult.jsp").forward(request, response);  
+            request.setAttribute("serarchData",searchData);
+            request.setAttribute("resultData",resultData);
+
+                request.getRequestDispatcher("/searchresult.jsp").forward(request, response); 
         }catch(Exception e){
             //何らかの理由で失敗したらエラーページにエラー文を渡して表示。想定は不正なアクセスとDBエラー
             request.setAttribute("error", e.getMessage());

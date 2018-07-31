@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -26,15 +27,14 @@ public class ResultDetail extends HttpServlet {
             throws ServletException, IOException {
         try{
             request.setCharacterEncoding("UTF-8");//リクエストパラメータの文字コードをUTF-8に変更
-
+            int userID = Integer.parseInt(request.getParameter("id"));
             //DTOオブジェクトにマッピング。DB専用のパラメータに変換
             UserDataDTO searchData = new UserDataDTO();
-            searchData.setUserID(2);
-
+            searchData.setUserID(userID);
             UserDataDTO resultData = UserDataDAO .getInstance().searchByID(searchData);
             request.setAttribute("resultData", resultData);
-            
-            request.getRequestDispatcher("/resultdetail.jsp").forward(request, response);  
+
+            request.getRequestDispatcher("/resultdetail.jsp").forward(request, response); 
         }catch(Exception e){
             //何らかの理由で失敗したらエラーページにエラー文を渡して表示。想定は不正なアクセスとDBエラー
             request.setAttribute("error", e.getMessage());

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
 /**
  *
  * @author hayashi-s
@@ -25,7 +27,12 @@ public class Search extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/search.jsp").forward(request, response);  
+            
+        HttpSession session=request.getSession();
+        session.setAttribute("ac",(int)(Math.random()*1000));
+        request.getRequestDispatcher("/search.jsp").forward(request, response); 
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

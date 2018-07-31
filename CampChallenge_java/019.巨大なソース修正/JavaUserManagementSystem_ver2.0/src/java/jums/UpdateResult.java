@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 /**
  *
@@ -26,18 +28,53 @@ public class UpdateResult extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        HttpSession session=request.getSession();
+        
         try {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UpdateResult</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UpdateResult at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
+            
+            request.setCharacterEncoding("UTF-8");
+//            直リンク防止
+            String accesschk=request.getParameter("ac");
+            if(accesschk == null || (Integer)session.getAttribute("ac")!=Integer.parseInt(accesschk)){
+                throw new Exception("不正なアクセスです");
+                
+            }
+            
+            UserDataBeans udb=new UserDataBeans();
+            udb.setName(request.getParameter("name"));
+            udb.setYear(request.getParameter("year"));
+            udb.setMonth(request.getParameter("month"));
+            udb.setDay(request.getParameter("day"));
+            udb.setTell(request.getParameter("tell"));
+            udb.setType(request.getParameter("type"));
+            udb.setComment(request.getParameter("comment"));
+            
+           // DTOオブジェクトにマッピング。DB専用パラメーターに変換
+            UserDataDTO userdata=new UserDataDTO();
+            udb.UD2DTOMapping(userdata);
+            userdata.setUserID(Integer.parseInt(request.getParameter("id")));
+            UserDataDAO.getInstance().update(userdata);
+            
+            request.setAttribute("udb",udb);
+            
+            request.getRequestDispatcher("/updateresult.jsp").forward(request,response);
+            
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Servlet UpdateResult</title>");            
+//            out.println("</head>");
+//            out.println("<body>");
+//            out.println("<h1>Servlet UpdateResult at " + request.getContextPath() + "</h1>");
+//            out.println("</body>");
+//            out.println("</html>");
+        }catch(Exception e){
+            request.setAttribute("error",e.getMessage());
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
+        
+        finally {
             out.close();
         }
     }

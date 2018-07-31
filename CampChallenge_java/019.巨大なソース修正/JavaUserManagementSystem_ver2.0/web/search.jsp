@@ -1,5 +1,5 @@
-<%@page 
-        import="jums.JumsHelper" %>
+<%@page import="jums.JumsHelper"%>
+
 <%
     JumsHelper jh = JumsHelper.getInstance();
 %>
@@ -12,7 +12,7 @@
         <title>JUMSユーザー情報検索画面</title>
     </head>
     <body>
-         <form action="SearchResult" method="POST">
+         <form action="SearchResult" method="GET">
         名前:
         <input type="text" name="name">
         <br><br>
@@ -29,11 +29,10 @@
         種別:
         <br>
             <% for(int i = 1; i<=3; i++){ %>
-            <input type="radio" name="type" value="<%=i%>"><%=jh.exTypenum(i)%><br>
+            <input type="radio" name="type" value="<%=jh.exTypenum(i)%>"><%=jh.exTypenum(i)%><br>
             <% } %>
         <br>
-
-        <input type="submit" name="btnSubmit" value="検索">
+       <input type="submit" name="btnSubmit" value="検索">
     </form>
         <br>
         <%=jh.home()%>
